@@ -7,12 +7,14 @@ app = Flask(__name__)
 
 
 # ==========================================
-# FILES
+# FILE PATHS
 # ==========================================
 
-CSV_FILE = "atm_transactions.csv"
-ACCOUNT_FILE = "accounts.csv"
-PAYMENT_FILE = "payments.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+CSV_FILE = os.path.join(BASE_DIR, "atm_transactions.csv")
+ACCOUNT_FILE = os.path.join(BASE_DIR, "accounts.csv")
+PAYMENT_FILE = os.path.join(BASE_DIR, "payments.csv")
 
 
 # ==========================================
@@ -21,12 +23,7 @@ PAYMENT_FILE = "payments.csv"
 
 def load_data():
 
-    file_path = os.path.join(
-        os.path.dirname(__file__),
-        CSV_FILE
-    )
-
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(CSV_FILE)
 
     df = df.dropna(how="all")
 
@@ -551,6 +548,10 @@ def analytics():
 
 if __name__ == "__main__":
 
+    port = int(os.environ.get("PORT", 5000))
+
     app.run(
-        debug=True
+        host="0.0.0.0",
+        port=port,
+        debug=False
     )
